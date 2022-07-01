@@ -18,38 +18,29 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapStores } from 'pinia'
+<script setup lang="ts">
 import { useTodoStore } from '~/store/todo'
 
-export default defineComponent({
-  data() {
-    return {
-      filters: {
-        done: {
-          title: '표시',
-          values: [
-            { name: '모두', value: 'all' },
-            { name: '완료만', value: 'true' },
-            { name: '미완료만', value: 'false' }
-          ]
-        },
-        sortBy: {
-          title: '정렬',
-          values: [
-            { name: '사용자지정 순', value: 'none' },
-            { name: '최신 순', value: 'newest' },
-            { name: '오래된 순', value: 'oldest' },
-          ]
-        }
-      }
-    }
+const todoStore = useTodoStore()
+
+const filters = {
+  done: {
+    title: '표시',
+    values: [
+      { name: '모두', value: 'all' },
+      { name: '완료만', value: 'true' },
+      { name: '미완료만', value: 'false' }
+    ]
   },
-  computed: {
-    ...mapStores(useTodoStore)
+  sortBy: {
+    title: '정렬',
+    values: [
+      { name: '사용자지정 순', value: 'none' },
+      { name: '최신 순', value: 'newest' },
+      { name: '오래된 순', value: 'oldest' },
+    ]
   }
-})
+}
 </script>
 
 <style scoped lang="scss">

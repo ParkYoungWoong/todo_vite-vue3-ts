@@ -12,30 +12,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapStores } from 'pinia'
+<script setup lang="ts">
+import { ref } from 'vue'
 import { useTodoStore } from '~/store/todo'
 
-export default defineComponent({
-  data() {
-    return {
-      title: ''
-    }
-  },
-  computed: {
-    ...mapStores(useTodoStore)
-  },
-  methods: {
-    createTodo(event: KeyboardEvent | MouseEvent) {
-      if ((event as KeyboardEvent).isComposing) return
-      if (!this.title.trim()) return
-      
-      this.todoStore.createTodo(this.title)
-      this.title = ''
-    }
-  }
-})
+const todoStore = useTodoStore()
+
+const title = ref('')
+
+function createTodo(event: KeyboardEvent | MouseEvent) {
+  if ((event as KeyboardEvent).isComposing) return
+  if (!title.value.trim()) return
+  
+  todoStore.createTodo(title.value)
+  title.value = ''
+}
 </script>
 
 <style scoped lang="scss">

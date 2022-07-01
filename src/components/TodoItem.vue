@@ -23,62 +23,57 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import dayjs from 'dayjs'
-import { defineComponent } from 'vue'
-import { mapStores } from 'pinia'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useTodoStore } from '~/store/todo'
 
-export default defineComponent({
-  props: {
-    todo: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      inFocusTitle: false
-    }
-  },
-  computed: {
-    ...mapStores(useTodoStore),
-    title: {
-      get() {
-        return this.todo.title
-      },
-      set(title: string) {
-        this.todoStore.updateTodo({
-          id: this.todo.id,
-          title,
-          done: this.todo.done,
-          order: this.todo.order
-        })
-      }
-    },
-    done: {
-      get() {
-        return this.todo.done
-      },
-      set(done: boolean) {
-        this.todoStore.updateTodo({
-          id: this.todo.id,
-          title: this.todo.title,
-          done,
-          order: this.todo.order
-        })
-      }
-    }
-  },
-  methods: {
-    showTodoDetails() {
-      this.$router.push(`/todos/${this.todo.id}`)
-    },
-    getDate(timestamp: string) {
-      return dayjs(timestamp).format('MM월 YY일 HH:mm')
-    }
+const router = useRouter()
+const todoStore = useTodoStore()
+
+const props = defineProps({
+  todo: {
+    type: Object,
+    required: true
   }
 })
+
+const inFocusTitle = ref(false)
+
+const title = computed({
+  get() {
+    return props.todo.title
+  },
+  set(title: string) {
+    todoStore.updateTodo({
+      id: props.todo.id,
+      title,
+      done: props.todo.done,
+      order: props.todo.order
+    })
+  }
+})
+const done = computed({
+  get() {
+    return props.todo.done
+  },
+  set(done: boolean) {
+    todoStore.updateTodo({
+      id: props.todo.id,
+      title: props.todo.title,
+      done,
+      order: props.todo.order
+    })
+  }
+})
+
+function showTodoDetails() {
+  router.push(`/todos/${props.todo.id}`)
+}
+function getDate(timestamp: string) {
+  return dayjs(timestamp).format('MM월 YY일 HH:mm')
+}
 </script>
 
 <style scoped lang="scss">
